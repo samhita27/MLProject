@@ -8,46 +8,35 @@ s = strcat(VLFEATROOT,'/toolbox/vl_setup');
 run(s);
 
 D1 = load ('/Users/samhitathakur/USC/Projects/EE660/cifar-10-batches-mat/data_batch_1.mat')
-[row,col] = size(D1.data)
+D2 = load ('/Users/samhitathakur/USC/Projects/EE660/cifar-10-batches-mat/data_batch_2.mat')
+D3 = load ('/Users/samhitathakur/USC/Projects/EE660/cifar-10-batches-mat/data_batch_3.mat')
+D4 = load ('/Users/samhitathakur/USC/Projects/EE660/cifar-10-batches-mat/data_batch_4.mat')
+D5 = load ('/Users/samhitathakur/USC/Projects/EE660/cifar-10-batches-mat/data_batch_5.mat')
 
-all_descriptors = [];
+D = [D1;D2;D3;D4;D5];
+
 count = 0;
 
-k = 50; %Number of codewords
+k = 10; %Number of codewords
 
-d = []; % #D array to store descriptors for each image
+pca_dim = 20;
 
-count_descr = zeros(row,1) ; %Number of descriptors for each image
+% count_descr1 = zeros(row,1) ; %Number of descriptors for each image
 
-for i= 1:row
-    R=D1.data(i,1:1024);
-    G=D1.data(i,1025:2048);
-    B=D1.data(i,2049:3072);
-    A(:,:,1)=reshape(R,32,32);
-    A(:,:,2)=reshape(G,32,32);
-    A(:,:,3)=reshape(B,32,32);
-    I = single(rgb2gray(A));
-    [frame,descr] = vl_phow(I,'Verbose',2,'Sizes',7,'Step',5,'Color','gray');
-    d(:,:,i) = descr';
-    count_descr(i,1) = size(descr,2);%Number of columns of descr gives the num of feature vectors for the image
-    all_descriptors = [all_descriptors;descr'];
+all_desc = [];
+
+for i=1:1
+dataset_desc = dense_sift(D(i));
+all_desc = [all_desc;dataset_desc];
 end
 
-[dsift_pca_descr,score,latent] = pca(double(all_descriptors'));
+[signals,pca_dir] = do_pca(all_desc);
 
-[idx,C] = kmeans(double(dsift_pca_descr),k);
+signals = signals(1:pca_dim,:);
 
-bow = zeros(row,k);
+[hist,C] = build_bof(signals);
 
-t = 1;
-
-for i=1:row
-   for j = t:t+count_descr(i,1)-1
-       bow(i,idx(j))= bow(i,idx(j)) + 1;
-   end
-   t = t + count_descr(i,1);
-end
-
+signals = signals' ;%Make the rows as the data points
 
 
 
