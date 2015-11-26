@@ -21,8 +21,6 @@ k = 10; %Number of codewords
 
 pca_dim = 20;
 
-% count_descr1 = zeros(row,1) ; %Number of descriptors for each image
-
 all_desc = [];
 
 for i=1:1
@@ -34,9 +32,41 @@ end
 
 signals = signals(1:pca_dim,:);
 
-[hist,C] = build_bof(signals);
+%cluster
+[idx,C] = kmeans(signals',k);
+
+N = 10000; %Number of training samples
+[hist] = build_bof(idx,k,N);
 
 signals = signals' ;%Make the rows as the data points
 
 
+%Load the test data
+DTest = load('/Users/samhitathakur/USC/Projects/EE660/cifar-10-batches-mat/test_batch.mat')
+
+%Extract SIFT descriptors for the test data
+test_desc = dense_sift(DTest);
+
+%Project test data along the pca dimensions of the training data
+[rowTest,colTest] = size(test_desc);
+
+mnTest = double(mean(test_desc',2));
+data = double(test_desc') - repmat(mnTest,1,rowTest);
+
+signalsTest = pca_dir * data;
+signalsTest = signalsTest' ;%Make the rows as the data points
+signalsTest = signalsTest(:,1:pca_dim);
+
+%Find the closest cluster center (use the clusters found using the training
+%samples
+idxTest = dsearchn(C,signalsTest);
+
+%Build the bag of features
+NTest = 10000;
+histTest = build_bof(idxTest,k,NTest);
+
+%Train the k nearest neighbour classifier
+
+
+%Using this model, on testing data and show errors
 
