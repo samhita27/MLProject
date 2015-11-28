@@ -13,11 +13,11 @@ orig_rows_train = 50000;
 row_per_dataset = 10000;
 num_categories = 10;
 rows_per_class = orig_rows_train/num_categories;
+num_datasets = 5;
 
 
 %User defined
-num_per_class = 100;
-num_datasets = 5;
+num_per_class = 100; %How many samples per class
 
 cat = zeros(rows_per_class,32*32*3,10);
 
@@ -50,7 +50,13 @@ for i=1:num_categories
 end
 
 data = horzcat(data,labels);
+%shuffle the rows
 data =  data(randperm(num_per_class*num_categories,num_per_class*num_categories),:);
+
+cat_label = data(:,3073);
+data(:,3073) = [];
+
+
 
 
 
