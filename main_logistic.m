@@ -16,16 +16,23 @@ testY = TY.testY;
 NTest = size(testY,1);
 
 %Classify using Multinomial Logistic Regression
-B = mnrfit(single(trainX),single(trainY+1));
+B = mnrfit(single(trainX),single(trainY));
 
-predY = mnrval(B,testX);
+probY = mnrval(B,testX);
+
+predY = zeros(NTest,1);
+
+for i=1:NTest
+   [num] = max(probY(i,:));
+   [x y] = ind2sub(size(probY(i,:)),find(probY(i,:)==num))
+   predY(i,1) = y;
+end
 
 
-err = mean(predY ~= (testY+1));
+
+err = mean(predY ~= (testY));
 
 err
 
 % Tabulate the results using a confusion matrix.
 confMat = confusionmat(double(testY), predY);
-
-helperDisplayConfusionMatrix(confMat)

@@ -10,8 +10,10 @@
     A(:,:,1)=reshape(R,32,32);
     A(:,:,2)=reshape(G,32,32);
     A(:,:,3)=reshape(B,32,32);
-    I = single(rgb2gray(A));
-    [frame,descr] = vl_phow(I,'Verbose', 2, 'Sizes', 7, 'Step', 5,'Color','gray');
+%     T = rgb2gray(A);
+    I = im2single(A);
+%     [frame,descr] = vl_phow(I,'Verbose', 2, 'Sizes', 7, 'Step', 5,'Color','rgb');
+    [frame,descr] = vl_phow(I,'Verbose', 2, 'Color','rgb');
     all_descriptors = [all_descriptors;descr'];
  end
 

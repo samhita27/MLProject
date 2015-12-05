@@ -14,7 +14,7 @@ trainY = D.ds.labels;
 
 count = 0;
 
-k = 50; %Number of codewords
+k = 100; %Number of codewords
 
 pca_dim = 20;
 

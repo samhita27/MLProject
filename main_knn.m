@@ -16,7 +16,7 @@ testY = TY.testY;
 NTest = size(testY,1);
 
 %Classify using n nearest neighbours
-n = 20; %Number of nearest neighbours
+n = 10; %Number of nearest neighbours
 k = size(testX,2);
 predY = perform_knn(trainX,trainY,n,NTest,testX,k);
 

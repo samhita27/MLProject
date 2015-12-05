@@ -26,7 +26,7 @@ for p=1:num_categories
     k=1;
     for j=1:num_datasets
         for i=1:row_per_dataset
-            if(D(j).labels(i,1) == p)
+            if(D(j).labels(i,1) == p-1)
                 cat_tr(k,:,p) = D(j).data(i,:);
                 k = k+1;
             end
@@ -62,7 +62,7 @@ save('reduced_data.mat','ds');
 
 %Choose test data
 orig_rows_test = 10000;
-samples_per_class = 50;
+samples_per_class = 100;
 rows_test_per_class = orig_rows_test/samples_per_class;
 
 T = load('/Users/samhitathakur/USC/Projects/EE660/cifar-10-batches-mat/test_batch.mat');
@@ -73,7 +73,7 @@ cat_test = zeros(rows_test_per_class,32*32*3,10);
 for p=1:num_categories
     k=1;
         for i=1:orig_rows_test
-            if(T.labels(i,1) == p)
+            if(T.labels(i,1) == p-1)
                 cat_test(k,:,p) = T.data(i,:);
                 k = k+1;
             end
