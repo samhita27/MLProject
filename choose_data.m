@@ -1,23 +1,26 @@
 clear all
 clear workspace
 
-D1 = load ('/Users/samhitathakur/USC/Projects/EE660/cifar-10-batches-mat/data_batch_1.mat')
-D2 = load ('/Users/samhitathakur/USC/Projects/EE660/cifar-10-batches-mat/data_batch_2.mat')
-D3 = load ('/Users/samhitathakur/USC/Projects/EE660/cifar-10-batches-mat/data_batch_3.mat')
-D4 = load ('/Users/samhitathakur/USC/Projects/EE660/cifar-10-batches-mat/data_batch_4.mat')
-D5 = load ('/Users/samhitathakur/USC/Projects/EE660/cifar-10-batches-mat/data_batch_5.mat')
+CIFAR_DIR = '/Users/samhitathakur/USC/Projects/EE660/cifar-10-batches-mat/';
+
+D1 = load (strcat(CIFAR_DIR,'data_batch_1.mat'));
+D2 = load (strcat(CIFAR_DIR,'data_batch_2.mat'));
+D3 = load (strcat(CIFAR_DIR,'data_batch_3.mat'));
+D4 = load (strcat(CIFAR_DIR,'data_batch_4.mat'));
+D5 = load (strcat(CIFAR_DIR,'data_batch_5.mat'));
 
 D = [D1;D2;D3;D4;D5];
 
+%%
 orig_rows_train = 50000;
 row_per_dataset = 10000;
 num_categories = 10;
 rows_per_class = orig_rows_train/num_categories;
 num_datasets = 5;
 
-
-%User defined
-num_per_class = 100; %How many samples per class
+%%User defined
+num_per_class = 500; %How many samples per class
+%%
 
 cat_tr = zeros(rows_per_class,32*32*3,10);
 
@@ -62,10 +65,10 @@ save('reduced_data.mat','ds');
 
 %Choose test data
 orig_rows_test = 10000;
-samples_per_class = 100;
-rows_test_per_class = orig_rows_test/samples_per_class;
+samples_per_class = 300;
+rows_test_per_class = orig_rows_test/num_categories;
 
-T = load('/Users/samhitathakur/USC/Projects/EE660/cifar-10-batches-mat/test_batch.mat');
+T = load(strcat(CIFAR_DIR,'test_batch.mat'));
 
 cat_test = zeros(rows_test_per_class,32*32*3,10);
 

@@ -1,22 +1,22 @@
 clear all
 clear workspace
 
-DX = load('trainX.mat');
-trainX = DX.hist;
+DX = load('ustrainX.mat');
+trainX = DX.trainXCs;
 
-DY = load('trainY.mat');
+DY = load('ustrainY.mat');
 trainY = DY.trainY;
 
-TX = load('testX.mat');
-testX = TX.histTest;
+TX = load('ustestX.mat');
+testX = TX.testXCs;
 
-TY = load('testY.mat');
+TY = load('ustestY.mat');
 testY = TY.testY;
 
 NTest = size(testY,1);
 
 %Classify using n nearest neighbours
-n = [100 200 300]; %Number of nearest neighbours
+n = [10 30 70 100]; %Number of nearest neighbours
 d = size(testX,2); %Dimensions of feature vector
 
 nfold = 10;
@@ -33,17 +33,16 @@ end
 
 [val,ind] = min(kloss);
 
-fprintf('Performing knn using n=%d\n',n(ind));
 predY = perform_knn(trainX,trainY,n(ind),NTest,testX,d);
 
 err = mean(predY ~= testY);
+
+err;
 
 fprintf('Test samples classification accuracy %f%%',(1-err)*100);
 fprintf('\n');
 
 % Tabulate the results using a confusion matrix.
-confMat = confusionmat(double(testY), predY);
-
 confMat = confusionmat(double(testY), double(predY));
 confMat = round(100 * confMat/(length(testY)/10));
 
